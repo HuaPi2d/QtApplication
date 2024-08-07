@@ -9,6 +9,7 @@ SubVideoWindow::SubVideoWindow(QWidget *parent)
     this->setWindowFlags(Qt::FramelessWindowHint);
 
     connect(subVideoWidget, &SubVideoWidget::widgetClosed, this, [=](){
+        emit windowDestroyed(this);
         this->deleteLater();
     });
     connect(subVideoWidget, &SubVideoWidget::sendStateInfo, this, &SubVideoWindow::snedStateInfo);

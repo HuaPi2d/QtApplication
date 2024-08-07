@@ -12,6 +12,7 @@ SubMusicWindow::SubMusicWindow(QWidget *parent)
     this->setWindowFlags(Qt::FramelessWindowHint);
 
     connect(subMusicWidget, &SubMusicWidget::widgetClosed, this, [=](){
+        emit windowDestroyed(this);
         this->deleteLater();
     });
     connect(subMusicWidget, &SubMusicWidget::sendStateInfo, this, &SubMusicWindow::snedStateInfo);

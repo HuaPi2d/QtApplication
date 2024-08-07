@@ -54,32 +54,29 @@ MainWindow::MainWindow(QWidget *parent)
     ui->processToolBar->hide();
     ui->mutiWindowWidget->hide();
 
-    /* 任务簇 */
+    /* 构建关于子窗口的簇 */
     signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(activateSubWindow(QWidget*)));
     taskButtonList = new QButtonGroup(this);
     taskButtonList->setExclusive(true);
+    subWindowList = new QWidgetList;
 
-    /* 连接信号和槽 */
-    connect(ui->reset_theme_action, &QAction::triggered, this, &MainWindow::loadDefaultSettings);  // 恢复默认配置
-    connect(ui->video_pushButton, &QPushButton::clicked, this, &MainWindow::changeToVideoUI);
-    connect(ui->video_action, &QAction::triggered, this, &MainWindow::changeToVideoUI); // 开启视频解析窗口
-    connect(ui->music_pushButton, &QPushButton::clicked, this, &MainWindow::changeToMusicUI);
-    connect(ui->music_action, &QAction::triggered, this, &MainWindow::changeToMusicUI); // 开启音乐盒
-    connect(ui->home_action, &QAction::triggered, this, [=](){
-        ui->mainWidget->show();
-        ui->mutiWindowWidget->hide();
-        ui->processToolBar->hide();
-    });
-    // connect(this, &MainWindow::isAnyChildWindow, this, [=](){
-    //     if(ui->functionArea->subWindowList().count() == 1){
-    //         ui->mainWidget->show();
-    //         ui->mutiWindowWidget->hide();
-    //         ui->processToolBar->hide();
-    //     }
-    // });
+    /* 恢复默认配置 */
+    connect(ui->reset_theme_action, &QAction::triggered, this, &MainWindow::loadDefaultSettings);
+
+    /* 创建子窗口 */
+    // 视频解析窗口
+    connect(ui->video_action, &QAction::triggered, ui->video_pushButton, &QPushButton::click);
+    connect(ui->video_pushButton, &QPushButton::clicked, this, &MainWindow::createVideoSubWindow);
+    // 音乐盒窗口
+    connect(ui->music_action, &QAction::triggered, ui->music_pushButton, &QPushButton::click);
+    connect(ui->music_pushButton, &QPushButton::clicked, this, &MainWindow::createMusicSubWindow);
+
+    /* 获取随机句子 */
     connect(ui->getRandomSentencePushButton, &QPushButton::clicked, this, &MainWindow::getRandomSentence); // 获取随机好文好句
     connect(ui->copySentencePushButton, &QPushButton::clicked, this, &MainWindow::copySentence);  // 复制到剪切板
+
+    /* 显示与隐藏任务栏 */
     connect(ui->processBarControlPushButton, &QPushButton::clicked, this, [=](){
         if(ui->processToolBar->isHidden() == true)
         {
@@ -92,7 +89,13 @@ MainWindow::MainWindow(QWidget *parent)
             ui->processBarControlPushButton->setIcon(QIcon(":/icon/resources/icons/leftLeft.svg"));
         }
     });
-    connect(ui->functionArea, &QMdiArea::subWindowActivated, this, &MainWindow::checkSubWindows);
+
+    /* 回到主菜单 */
+    connect(ui->home_action, &QAction::triggered, this, [=](){
+        ui->processToolBar->setVisible(false);
+        ui->mutiWindowWidget->setVisible(false);
+        ui->mainWidget->setVisible(true);
+    });
 }
 
 MainWindow::~MainWindow()
@@ -154,92 +157,11 @@ void MainWindow::loadDefaultSettings()
     updateTheme(); // 读取主题设置
 }
 
-void MainWindow::changeToVideoUI()
-{
-    /* 隐藏主界面，显示功能界面 */
-    if(ui->mainWidget->isHidden() == false)
-    {
-        changeToWorkingUI();
-    }
-
-    /* 刷新视频界面 */
-    SubVideoWindow *subVideoWindow = new SubVideoWindow(this);
-    qDebug() << subVideoWindow;
-    subVideoWindow->setParent(this);
-    ui->functionArea->addSubWindow(subVideoWindow);
-    subVideoWindow->showMaximized();
-
-    /* 创建任务栏按钮 */
-    QPushButton *taskButton = new QPushButton(subVideoWindow);
-    taskButton->setIcon(QIcon(":/icon/resources/icons/MaterialSymbolsMediaLinkOutline.svg"));
-    taskButton->setCheckable(true);
-    taskButton->setChecked(true);
-    taskButton->setStyleSheet("QPushButton {border: none; background-color:rgb(231, 234, 248);}QPushButton:hover {background-color:rgb(249, 239, 241);}QPushButton:checked {background-color:grey;}");
-    ui->processToolBar->addWidget(taskButton);
-    this->taskButtonList->addButton(taskButton);
-
-    /* 将任务栏按钮和子窗口连接起来 */
-    connect(taskButton, &QPushButton::clicked, signalMapper, QOverload<>::of(&QSignalMapper::map));
-    signalMapper->setMapping(taskButton, subVideoWindow);
-
-    connect(taskButton, &QPushButton::clicked, this, [=](){
-        subVideoWindow->showMaximized();
-    });
-
-    /* 连接信号和槽 */
-    connect(subVideoWindow, &SubVideoWindow::destroyed, this, &MainWindow::isAnyChildWindow); // 窗口销毁时判断是否回到主界面
-    connect(subVideoWindow, &SubVideoWindow::destroyed, [this, taskButton]() {
-        taskButton->deleteLater();
-        qDebug() << taskButtonList->buttons();
-    });  // 窗口销毁时，销毁任务栏按钮
-    connect(subVideoWindow, &SubVideoWindow::snedStateInfo, this, &MainWindow::showStateInfo);
-}
-
 void MainWindow::updateTheme()
 {
     this->advancedStyleSheet->setCurrentTheme(currentTheme);
     this->advancedStyleSheet->updateStylesheet();
     qApp->setStyleSheet(advancedStyleSheet->styleSheet());
-}
-
-void MainWindow::changeToMusicUI()
-{
-    /* 隐藏主界面，显示功能界面 */
-    if(ui->mainWidget->isHidden() == false)
-    {
-        changeToWorkingUI();
-    }
-
-    /* 创建音乐子界面对象 */
-    SubMusicWindow *subMusicWindow = new SubMusicWindow(this);
-    qDebug() << subMusicWindow;
-    subMusicWindow->setParent(this);
-    ui->functionArea->addSubWindow(subMusicWindow);
-    subMusicWindow->showMaximized();
-
-    /* 创建任务栏按钮 */
-    QPushButton *taskButton = new QPushButton(subMusicWindow);
-    taskButton->setIcon(QIcon(":/icon/resources/icons/MaterialSymbolsGenresOutline.svg"));
-    taskButton->setCheckable(true);
-    taskButton->setChecked(true);
-    taskButton->setStyleSheet("QPushButton {border: none; background-color:rgb(231, 234, 248);}QPushButton:hover {background-color:rgb(249, 239, 241);}QPushButton:checked {background-color:grey;}");
-    ui->processToolBar->addWidget(taskButton);
-    this->taskButtonList->addButton(taskButton);
-
-    /* 将任务栏按钮和子窗口连接起来 */
-    connect(taskButton, &QPushButton::clicked, signalMapper, QOverload<>::of(&QSignalMapper::map));
-    signalMapper->setMapping(taskButton, subMusicWindow);
-
-    connect(taskButton, &QPushButton::clicked, this, [=](){
-        subMusicWindow->showMaximized();
-    });
-
-    /* 连接信号和槽 */
-    connect(subMusicWindow, &SubMusicWindow::destroyed, this, &MainWindow::isAnyChildWindow); // 窗口销毁时判断是否回到主界面
-    connect(subMusicWindow, &SubMusicWindow::destroyed, [this, taskButton]() {
-        taskButton->deleteLater();
-    });  // 窗口销毁时，销毁任务栏按钮
-    connect(subMusicWindow, &SubMusicWindow::snedStateInfo, this, &MainWindow::showStateInfo);
 }
 
 void MainWindow::getRandomSentence()
@@ -300,4 +222,122 @@ void MainWindow::checkSubWindows(QMdiSubWindow *window) {
     else {
         window->showMaximized();
     }
+}
+
+void MainWindow::createMusicSubWindow()
+{
+    /* 隐藏主界面，显示功能界面 */
+    if(ui->mainWidget->isHidden() == false)
+        changeToWorkingUI();
+
+    /* 创建音乐界面子窗口 */
+    SubMusicWindow *subMusicWindow = new SubMusicWindow(this);  // 创建子窗口
+    ui->functionArea->addSubWindow(subMusicWindow);  // 添加到工作区
+    subMusicWindow->showMaximized();  // 最大化显示
+    subWindowList->append(subMusicWindow); // 加入子窗口列表
+
+    /* 创建任务栏按钮 */
+    QPushButton *taskButton = new QPushButton(this);
+    taskButton->setIcon(QIcon(":/icon/resources/icons/MaterialSymbolsGenresOutline.svg"));
+    taskButton->setCheckable(true);
+    taskButton->setChecked(true);
+    taskButton->setStyleSheet("QPushButton {border: none; background-color:rgb(231, 234, 248);}QPushButton:hover {background-color:rgb(249, 239, 241);}QPushButton:checked {background-color:grey;}");
+    ui->processToolBar->addWidget(taskButton);
+    this->taskButtonList->addButton(taskButton);
+
+    /* 将任务栏按钮和子窗口连接起来 */
+    connect(taskButton, &QPushButton::clicked, signalMapper, QOverload<>::of(&QSignalMapper::map));
+    signalMapper->setMapping(taskButton, subMusicWindow);
+
+    connect(taskButton, &QPushButton::clicked, this, [=](){
+        subMusicWindow->showMaximized();
+    });
+
+    /* 窗口销毁时的事件 */
+    connect(subMusicWindow, &SubMusicWindow::windowDestroyed, [this, taskButton](QMdiSubWindow *window) {
+        /* 在List中剔除对应窗口，按钮 */
+        this->taskButtonList->removeButton(taskButton);
+        for(int i = 0; i<this->subWindowList->count(); i++)
+        {
+            if(this->subWindowList->at(i) == window)
+            {
+                this->subWindowList->remove(i);
+                break;
+            }
+        }
+
+        /* 判断是否回到主界面 */
+        if(this->subWindowList->empty() == true)
+        {
+            ui->processToolBar->setVisible(false);
+            ui->mutiWindowWidget->setVisible(false);
+            ui->mainWidget->setVisible(true);
+        }
+        else
+        {
+            this->subWindowList->at(0)->showMaximized();
+        }
+
+        /* 销毁任务栏按钮 */
+        taskButton->deleteLater();
+    });
+}
+
+void MainWindow::createVideoSubWindow()
+{
+    /* 隐藏主界面，显示功能界面 */
+    if(ui->mainWidget->isHidden() == false)
+        changeToWorkingUI();
+
+    /* 创建音乐界面子窗口 */
+    SubVideoWindow *subVideoWindow = new SubVideoWindow(this);  // 创建子窗口
+    ui->functionArea->addSubWindow(subVideoWindow);  // 添加到工作区
+    subVideoWindow->showMaximized();  // 最大化显示
+    subWindowList->append(subVideoWindow); // 加入子窗口列表
+
+    /* 创建任务栏按钮 */
+    QPushButton *taskButton = new QPushButton(this);
+    taskButton->setIcon(QIcon(":/icon/resources/icons/MaterialSymbolsMediaLinkOutline.svg"));
+    taskButton->setCheckable(true);
+    taskButton->setChecked(true);
+    taskButton->setStyleSheet("QPushButton {border: none; background-color:rgb(231, 234, 248);}QPushButton:hover {background-color:rgb(249, 239, 241);}QPushButton:checked {background-color:grey;}");
+    ui->processToolBar->addWidget(taskButton);
+    this->taskButtonList->addButton(taskButton);
+
+    /* 将任务栏按钮和子窗口连接起来 */
+    connect(taskButton, &QPushButton::clicked, signalMapper, QOverload<>::of(&QSignalMapper::map));
+    signalMapper->setMapping(taskButton, subVideoWindow);
+
+    connect(taskButton, &QPushButton::clicked, this, [=](){
+        subVideoWindow->showMaximized();
+    });
+
+    /* 窗口销毁时的事件 */
+    connect(subVideoWindow, &SubVideoWindow::windowDestroyed, [this, taskButton](QMdiSubWindow *window) {
+        /* 在List中剔除对应窗口，按钮 */
+        this->taskButtonList->removeButton(taskButton);
+        for(int i = 0; i<this->subWindowList->count(); i++)
+        {
+            if(this->subWindowList->at(i) == window)
+            {
+                this->subWindowList->remove(i);
+                break;
+            }
+        }
+
+        /* 判断是否回到主界面 */
+        if(this->subWindowList->empty() == true)
+        {
+            ui->processToolBar->setVisible(false);
+            ui->mutiWindowWidget->setVisible(false);
+            ui->mainWidget->setVisible(true);
+        }
+        else
+        {
+            this->subWindowList->at(0)->showMaximized();
+        }
+
+        /* 销毁任务栏按钮 */
+        taskButton->deleteLater();
+    });
 }

@@ -11,6 +11,7 @@ public:
 
 signals:
     void snedStateInfo(QString state);
+    void windowDestroyed(QMdiSubWindow *window);
 };
 
 #endif // SUBMUSICWINDOW_H

@@ -25,13 +25,13 @@ public:
     void loadSettings();
     void updateTheme();
     void loadDefaultSettings();
-    void changeToVideoUI();
-    void changeToMusicUI();
     void getRandomSentence();
     void copySentence();
     void changeToWorkingUI();
     void showStateInfo(QString state);
     void checkSubWindows(QMdiSubWindow *window);
+    void createMusicSubWindow();
+    void createVideoSubWindow();
 
 private:
     Ui::MainWindow *ui;
@@ -40,6 +40,7 @@ private:
     QString currentTheme;
     QSignalMapper *signalMapper;
     QButtonGroup *taskButtonList;
+    QWidgetList *subWindowList;
 
 private slots:
     void onThemeActionTriggered();
