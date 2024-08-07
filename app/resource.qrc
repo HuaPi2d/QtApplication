@@ -1,0 +1,38 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>resources/icons/MaterialSymbols18UpRatingOutline.png</file>
+        <file>resources/icons/MaterialSymbolsRuleSettings.svg</file>
+        <file>resources/icons/MaterialSymbolsMediaLinkOutline.svg</file>
+        <file>resources/icons/MaterialSymbolsGenresOutline.svg</file>
+        <file>resources/icons/MaterialSymbolsFontDownloadOutline.svg</file>
+        <file>resources/icons/MaterialSymbolsStyler.svg</file>
+        <file>resources/icons/MaterialSymbolsHomeOutline.svg</file>
+        <file>resources/icons/MaterialSymbolsComputerOutlineRounded.svg</file>
+        <file>resources/icons/MaterialSymbolsDownload.svg</file>
+        <file>resources/icons/MaterialSymbolsDownloadForOfflineOutline.svg</file>
+        <file>resources/icons/MaterialSymbolsSearchRounded.svg</file>
+        <file>resources/icons/MaterialSymbolsSimCardDownloadOutline.svg</file>
+        <file>resources/icons/MdiThemeLightDark.svg</file>
+        <file>resources/icons/MdiRefresh.svg</file>
+        <file>resources/icons/MdiPencilCircleOutline.svg</file>
+        <file>resources/icons/MdiPuzzleOutline.svg</file>
+        <file>resources/icons/MdiBookmarkPlusOutline.svg</file>
+        <file>resources/icons/MdiContentCopy.svg</file>
+        <file>resources/icons/musicPlay.svg</file>
+        <file>resources/icons/nextMusic.svg</file>
+        <file>resources/icons/pause.svg</file>
+        <file>resources/icons/previousMusic.svg</file>
+        <file>resources/icons/IconamoonPlaylistRepeatList.svg</file>
+        <file>resources/icons/IconamoonPlaylistRepeatSong.svg</file>
+        <file>resources/icons/IconamoonPlaylistShuffle.svg</file>
+        <file>resources/icons/leftLeft.svg</file>
+        <file>resources/icons/rightRight.svg</file>
+        <file>resources/icons/IconamoonCloseCircle1.svg</file>
+        <file>resources/icons/IconamoonArrowRight5Circle.svg</file>
+    </qresource>
+    <qresource prefix="/pic/defaultPic">
+        <file>resources/pic/defaultPic/defaultMusicPic.svg</file>
+        <file>resources/pic/defaultPic/defaultMusicPic.jpg</file>
+        <file>resources/pic/defaultPic/geQuBao.png</file>
+    </qresource>
+</RCC>

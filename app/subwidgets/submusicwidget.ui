@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SubMusicWidget</class>
+ <widget class="QWidget" name="SubMusicWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>658</width>
+    <height>420</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <item>
+    <layout class="QVBoxLayout" name="toolPart">
+     <item>
+      <widget class="QPushButton" name="findMuiscPushButton">
+       <property name="minimumSize">
+        <size>
+         <width>36</width>
+         <height>36</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none; 
+width: 20px; height: 50px;
+}
+QPushButton:hover {
+border: 2px solid blue;
+}
+QPushButton:pressed {
+ border: 2px solid red; 
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/icon/resources/icons/MaterialSymbolsSearchRounded.svg</normaloff>:/icon/resources/icons/MaterialSymbolsSearchRounded.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>36</width>
+         <height>36</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="localMusicPushButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none; 
+width: 20px; height: 50px;
+}
+QPushButton:hover {
+border: 2px solid blue;
+}
+QPushButton:pressed {
+ border: 2px solid red; 
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/icon/resources/icons/MaterialSymbolsSimCardDownloadOutline.svg</normaloff>:/icon/resources/icons/MaterialSymbolsSimCardDownloadOutline.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>36</width>
+         <height>36</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="closePushButton">
+       <property name="toolTip">
+        <string>关闭音乐盒</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none; 
+width: 20px; height: 50px;
+}
+QPushButton:hover {
+border: 2px solid blue;
+}
+QPushButton:pressed {
+ border: 2px solid red; 
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/icon/resources/icons/IconamoonCloseCircle1.svg</normaloff>:/icon/resources/icons/IconamoonCloseCircle1.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>36</width>
+         <height>36</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="mainPart">
+     <item>
+      <widget class="QWidget" name="searchWidget" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QWidget" name="searchBarWidget" native="true">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>50</height>
+           </size>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="music_source_label">
+             <property name="text">
+              <string>音乐源</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="musicSourceComboBox">
+             <item>
+              <property name="text">
+               <string>歌曲宝</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>酷狗音乐</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="musicSearchLineEdit">
+             <property name="placeholderText">
+              <string>搜音乐</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="searchMusicPushButton">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>搜索</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListView" name="musicSearchResultListView"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="musicPlayWidget" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="musicPicLabel">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>130</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="musicVerticalLayout">
+          <item>
+           <layout class="QHBoxLayout" name="musicInfoHorizontalLayout">
+            <item>
+             <widget class="QLabel" name="spaceLabel">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="musicNameLabel">
+              <property name="styleSheet">
+               <string notr="true">QLabel { font-family: 'Microsoft YaHei'; font-size: 18pt; }</string>
+              </property>
+              <property name="text">
+               <string>musicName</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="artistVerticalLayout">
+              <item>
+               <widget class="QWidget" name="emptyWidget" native="true">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>6</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="ArtistLabel">
+                <property name="text">
+                 <string>Artist</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="controlHorizontalLayout">
+            <item>
+             <widget class="QPushButton" name="previousMusicPushButton">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    border: none; 
+}
+QPushButton:hover {
+border: 2px solid blue;
+}
+QPushButton:pressed {
+ border: 2px solid red; 
+ }</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../resource.qrc">
+                <normaloff>:/icon/resources/icons/previousMusic.svg</normaloff>:/icon/resources/icons/previousMusic.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="playPushButton">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    border: none; 
+}
+QPushButton:hover {
+border: 2px solid blue;
+}
+QPushButton:pressed {
+ border: 2px solid red; 
+ }</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../resource.qrc">
+                <normaloff>:/icon/resources/icons/musicPlay.svg</normaloff>:/icon/resources/icons/musicPlay.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="nextMusicPushButton">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    border: none; 
+}
+QPushButton:hover {
+border: 2px solid blue;
+}
+QPushButton:pressed {
+ border: 2px solid red; 
+ }</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../resource.qrc">
+                <normaloff>:/icon/resources/icons/nextMusic.svg</normaloff>:/icon/resources/icons/nextMusic.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="playModePushButton">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="baseSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    border: none; 
+}
+QPushButton:hover {
+border: 2px solid blue;
+}
+QPushButton:pressed {
+ border: 2px solid red; 
+ }</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../resource.qrc">
+                <normaloff>:/icon/resources/icons/IconamoonPlaylistRepeatList.svg</normaloff>:/icon/resources/icons/IconamoonPlaylistRepeatList.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <action name="music_search_action">
+   <property name="icon">
+    <iconset resource="../resource.qrc">
+     <normaloff>:/icon/resources/icons/MaterialSymbolsSearchRounded.svg</normaloff>:/icon/resources/icons/MaterialSymbolsSearchRounded.svg</iconset>
+   </property>
+   <property name="text">
+    <string>音乐搜索</string>
+   </property>
+   <property name="toolTip">
+    <string>音乐搜索</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

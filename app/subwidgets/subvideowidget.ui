@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SubVideoWidget</class>
+ <widget class="QWidget" name="SubVideoWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>623</width>
+    <height>327</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="toolPart">
+     <item>
+      <widget class="QPushButton" name="findMuiscPushButton">
+       <property name="minimumSize">
+        <size>
+         <width>36</width>
+         <height>36</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none; 
+width: 20px; height: 50px;
+}
+QPushButton:hover {
+border: 2px solid blue;
+}
+QPushButton:pressed {
+ border: 2px solid red; 
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/icon/resources/icons/MaterialSymbolsSearchRounded.svg</normaloff>:/icon/resources/icons/MaterialSymbolsSearchRounded.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>36</width>
+         <height>36</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="localMusicPushButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none; 
+width: 20px; height: 50px;
+}
+QPushButton:hover {
+border: 2px solid blue;
+}
+QPushButton:pressed {
+ border: 2px solid red; 
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/icon/resources/icons/MaterialSymbolsSimCardDownloadOutline.svg</normaloff>:/icon/resources/icons/MaterialSymbolsSimCardDownloadOutline.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>36</width>
+         <height>36</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="closePushButton">
+       <property name="toolTip">
+        <string>关闭音乐盒</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border: none; 
+width: 20px; height: 50px;
+}
+QPushButton:hover {
+border: 2px solid blue;
+}
+QPushButton:pressed {
+ border: 2px solid red; 
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/icon/resources/icons/IconamoonCloseCircle1.svg</normaloff>:/icon/resources/icons/IconamoonCloseCircle1.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>36</width>
+         <height>36</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QWidget" name="info_widgets" native="true">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>50</height>
+      </size>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QComboBox" name="website_comboBox">
+        <item>
+         <property name="text">
+          <string>bilibili</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>YouTube（需要梯子）</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="video_url_label">
+        <property name="text">
+         <string>视频链接</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="video_url"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>
