@@ -12,5 +12,5 @@ SubVideoWindow::SubVideoWindow(QWidget *parent)
         emit windowDestroyed(this);
         this->deleteLater();
     });
-    connect(subVideoWidget, &SubVideoWidget::sendStateInfo, this, &SubVideoWindow::snedStateInfo);
+    connect(subVideoWidget, &SubVideoWidget::sendStateInfo, this, &SubVideoWindow::sendStateInfo);
 }

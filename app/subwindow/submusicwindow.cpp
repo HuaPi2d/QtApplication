@@ -15,5 +15,5 @@ SubMusicWindow::SubMusicWindow(QWidget *parent)
         emit windowDestroyed(this);
         this->deleteLater();
     });
-    connect(subMusicWidget, &SubMusicWidget::sendStateInfo, this, &SubMusicWindow::snedStateInfo);
+    connect(subMusicWidget, &SubMusicWidget::sendStateInfo, this, &SubMusicWindow::sendStateInfo);
 }

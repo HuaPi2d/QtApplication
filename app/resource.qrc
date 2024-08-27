@@ -29,6 +29,8 @@
         <file>resources/icons/rightRight.svg</file>
         <file>resources/icons/IconamoonCloseCircle1.svg</file>
         <file>resources/icons/IconamoonArrowRight5Circle.svg</file>
+        <file>resources/icons/PhFolderNotchOpen.svg</file>
+        <file>resources/icons/communist.svg</file>
     </qresource>
     <qresource prefix="/pic/defaultPic">
         <file>resources/pic/defaultPic/defaultMusicPic.svg</file>

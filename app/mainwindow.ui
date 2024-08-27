@@ -39,6 +39,8 @@
            <property name="styleSheet">
             <string notr="true">QPushButton {
     border: none; 
+width: 10px;
+height:40px;
 }
 </string>
            </property>
@@ -48,6 +50,12 @@
            <property name="icon">
             <iconset resource="resource.qrc">
              <normaloff>:/icon/resources/icons/leftLeft.svg</normaloff>:/icon/resources/icons/leftLeft.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -156,8 +164,11 @@ QPushButton:pressed {
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
            <widget class="QPushButton" name="video_pushButton">
+            <property name="toolTip">
+             <string>b站,YouTube等视频网站解析</string>
+            </property>
             <property name="text">
-             <string>视频解析</string>
+             <string> 视频解析</string>
             </property>
             <property name="icon">
              <iconset resource="resource.qrc">
@@ -193,14 +204,53 @@ QPushButton:pressed {
           </item>
           <item row="0" column="1">
            <widget class="QPushButton" name="music_pushButton">
+            <property name="toolTip">
+             <string>听你享听</string>
+            </property>
             <property name="text">
-             <string>音乐盒</string>
+             <string> 音乐盒</string>
             </property>
             <property name="icon">
              <iconset resource="resource.qrc">
               <normaloff>:/icon/resources/icons/MaterialSymbolsGenresOutline.svg</normaloff>:/icon/resources/icons/MaterialSymbolsGenresOutline.svg</iconset>
             </property>
            </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="defend_groupBox">
+         <property name="title">
+          <string>红客帝国</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="commentPushButton">
+            <property name="toolTip">
+             <string>未来的寰宇，必是赤旗的天下</string>
+            </property>
+            <property name="text">
+             <string> 舆论阵地</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/icon/resources/icons/communist.svg</normaloff>:/icon/resources/icons/communist.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacerOfDGB">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -267,6 +317,7 @@ QPushButton:pressed {
     <addaction name="music_action"/>
     <addaction name="separator"/>
     <addaction name="home_action"/>
+    <addaction name="function_action"/>
    </widget>
    <widget class="QMenu" name="aboutMenu">
     <property name="title">
@@ -457,6 +508,15 @@ QPushButton:pressed {
    </property>
    <property name="text">
     <string>转到功能界面</string>
+   </property>
+  </action>
+  <action name="function_action">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icon/resources/icons/IconamoonArrowRight5Circle.svg</normaloff>:/icon/resources/icons/IconamoonArrowRight5Circle.svg</iconset>
+   </property>
+   <property name="text">
+    <string>转到工作界面</string>
    </property>
   </action>
  </widget>

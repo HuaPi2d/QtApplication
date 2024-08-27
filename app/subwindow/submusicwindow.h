@@ -10,7 +10,7 @@ public:
     explicit SubMusicWindow(QWidget *parent = nullptr);
 
 signals:
-    void snedStateInfo(QString state);
+    void sendStateInfo(QString state);
     void windowDestroyed(QMdiSubWindow *window);
 };
 

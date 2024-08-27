@@ -96,6 +96,11 @@ MainWindow::MainWindow(QWidget *parent)
         ui->mutiWindowWidget->setVisible(false);
         ui->mainWidget->setVisible(true);
     });
+
+    connect(ui->function_action, &QAction::triggered, this, [=](){
+        ui->mutiWindowWidget->setVisible(true);
+        ui->mainWidget->setVisible(false);
+    });
 }
 
 MainWindow::~MainWindow()
@@ -159,6 +164,10 @@ void MainWindow::loadDefaultSettings()
 
 void MainWindow::updateTheme()
 {
+    if(currentTheme.contains("dark"))
+        ui->processToolBar->setStyleSheet("QToolBar{background-color:rgb(55, 61, 67)}");
+    else
+        ui->processToolBar->setStyleSheet("QToolBar{background-color:rgb(250,250,250)}");
     this->advancedStyleSheet->setCurrentTheme(currentTheme);
     this->advancedStyleSheet->updateStylesheet();
     qApp->setStyleSheet(advancedStyleSheet->styleSheet());
@@ -253,6 +262,9 @@ void MainWindow::createMusicSubWindow()
         subMusicWindow->showMaximized();
     });
 
+    /* 状态信息接收 */
+    connect(subMusicWindow, &SubMusicWindow::sendStateInfo, this, &MainWindow::showStateInfo);
+
     /* 窗口销毁时的事件 */
     connect(subMusicWindow, &SubMusicWindow::windowDestroyed, [this, taskButton](QMdiSubWindow *window) {
         /* 在List中剔除对应窗口，按钮 */
@@ -303,6 +315,9 @@ void MainWindow::createVideoSubWindow()
     taskButton->setStyleSheet("QPushButton {border: none; background-color:rgb(231, 234, 248);}QPushButton:hover {background-color:rgb(249, 239, 241);}QPushButton:checked {background-color:grey;}");
     ui->processToolBar->addWidget(taskButton);
     this->taskButtonList->addButton(taskButton);
+
+    /* 状态信息接收 */
+    connect(subVideoWindow, &SubVideoWindow::sendStateInfo, this, &MainWindow::showStateInfo);
 
     /* 将任务栏按钮和子窗口连接起来 */
     connect(taskButton, &QPushButton::clicked, signalMapper, QOverload<>::of(&QSignalMapper::map));
