@@ -23,6 +23,8 @@
 #include <QList>
 #include <QtMultimedia>
 
+#include "otherwidgets/singledownloadframe.h"
+
 
 class MusicInfo {
 public:
@@ -300,6 +302,9 @@ public: signals:
     void sendStateInfo(QString state);
     void changeMusicProcessBegin();
     void changeMusicProcessFinish();
+    void addDownloadTask(SingleDownloadFrame *singleDownloadFrame);
+    void sendRemindText(QString remindText);
+    void deleteLocalMusicFile(QString filePath);
 
 private slots:
     void on_openLocalDirPushButton_clicked();

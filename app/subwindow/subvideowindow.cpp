@@ -13,4 +13,5 @@ SubVideoWindow::SubVideoWindow(QWidget *parent)
         this->deleteLater();
     });
     connect(subVideoWidget, &SubVideoWidget::sendStateInfo, this, &SubVideoWindow::sendStateInfo);
+    connect(this, &SubVideoWindow::updateQuickWidgetColor, subVideoWidget, &SubVideoWidget::updateQuickWidgetColor);
 }

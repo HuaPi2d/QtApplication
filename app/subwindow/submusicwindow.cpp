@@ -16,4 +16,5 @@ SubMusicWindow::SubMusicWindow(QWidget *parent)
         this->deleteLater();
     });
     connect(subMusicWidget, &SubMusicWidget::sendStateInfo, this, &SubMusicWindow::sendStateInfo);
+    connect(subMusicWidget, &SubMusicWidget::addDownloadTask, this, &SubMusicWindow::addDownloadTask);
 }

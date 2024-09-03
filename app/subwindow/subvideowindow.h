@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMdiSubWindow>
+#include "otherwidgets/singledownloadframe.h"
 
 class SubVideoWindow : public QMdiSubWindow
 {
@@ -13,6 +14,7 @@ public:
 signals:
     void sendStateInfo(QString state);
     void windowDestroyed(QMdiSubWindow *window);
+    void updateQuickWidgetColor(QColor color);
 };
 
 #endif // SUBVIDEOWINDOW_H

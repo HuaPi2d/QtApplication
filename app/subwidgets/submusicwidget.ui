@@ -201,7 +201,7 @@ QPushButton:pressed {
       <widget class="QWidget" name="localSongWidget" native="true">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QListView" name="localSongListView"/>
+         <widget class="LocalMusicListView" name="localSongListView"/>
         </item>
        </layout>
       </widget>
@@ -567,6 +567,13 @@ QPushButton:pressed {
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LocalMusicListView</class>
+   <extends>QListView</extends>
+   <header>localmusiclistview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../resource.qrc"/>
  </resources>

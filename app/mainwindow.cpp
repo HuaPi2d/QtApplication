@@ -9,6 +9,10 @@
 #include <QFontDialog>
 #include <QClipboard>
 #include <QToolBar>
+#include <QLabel>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 
 #define _STR(x) #x
@@ -60,6 +64,31 @@ MainWindow::MainWindow(QWidget *parent)
     taskButtonList = new QButtonGroup(this);
     taskButtonList->setExclusive(true);
     subWindowList = new QWidgetList;
+
+    /* 添加一个按钮到菜单栏右侧 */
+    QPushButton *downloadContentButton = new QPushButton(QIcon(":/icon/resources/icons/downloading.svg"), "", this);
+    downloadContentButton->setStyleSheet("QPushButton {border: none;}");
+    downloadContentButton->setToolTip("下载内容");
+    ui->menubar->setCornerWidget(downloadContentButton, Qt::TopRightCorner);
+
+    /* 加载QQuickWidget控件 */
+    ui->quickWidget->hide();
+
+    connect(downloadContentButton, &QPushButton::clicked, [=](){
+        // 获取按钮的全局位置
+        QPoint buttonPos = downloadContentButton->mapToGlobal(QPoint(0, 0));
+
+        // 计算无标题框窗口应显示的位置
+        QPoint popupPos(buttonPos.x() + downloadContentButton->width() - downloadListWidget->width(), buttonPos.y() + downloadContentButton->height());
+
+        // 设置无标题框窗口的位置
+        downloadListWidget->show();
+        downloadListWidget->move(popupPos);
+    });
+
+    /* 创建下载历史列表 */
+    downloadListWidget = new DownloadListWidget(this);
+    downloadListWidget->hide();
 
     /* 恢复默认配置 */
     connect(ui->reset_theme_action, &QAction::triggered, this, &MainWindow::loadDefaultSettings);
@@ -165,12 +194,20 @@ void MainWindow::loadDefaultSettings()
 void MainWindow::updateTheme()
 {
     if(currentTheme.contains("dark"))
+    {
         ui->processToolBar->setStyleSheet("QToolBar{background-color:rgb(55, 61, 67)}");
+        emit updateQuickWidgetColor(QColor(55, 61, 67));
+    }
     else
+    {
         ui->processToolBar->setStyleSheet("QToolBar{background-color:rgb(250,250,250)}");
+        emit updateQuickWidgetColor(QColor(250,250,250));
+    }
     this->advancedStyleSheet->setCurrentTheme(currentTheme);
     this->advancedStyleSheet->updateStylesheet();
     qApp->setStyleSheet(advancedStyleSheet->styleSheet());
+
+
 }
 
 void MainWindow::getRandomSentence()
@@ -187,7 +224,7 @@ void MainWindow::getRandomSentence()
     });
 
     /* 发送请求 */
-    getSentence->getData(QUrl("https://tenapi.cn/v2/yiyan"));
+    getSentence->getData(QUrl("https://uapis.cn/api/say"));
 }
 
 void MainWindow::copySentence()
@@ -266,7 +303,7 @@ void MainWindow::createMusicSubWindow()
     connect(subMusicWindow, &SubMusicWindow::sendStateInfo, this, &MainWindow::showStateInfo);
 
     /* 窗口销毁时的事件 */
-    connect(subMusicWindow, &SubMusicWindow::windowDestroyed, [this, taskButton](QMdiSubWindow *window) {
+    connect(subMusicWindow, &SubMusicWindow::windowDestroyed, [this, taskButton, &subMusicWindow](QMdiSubWindow *window) {
         /* 在List中剔除对应窗口，按钮 */
         this->taskButtonList->removeButton(taskButton);
         for(int i = 0; i<this->subWindowList->count(); i++)
@@ -293,6 +330,9 @@ void MainWindow::createMusicSubWindow()
         /* 销毁任务栏按钮 */
         taskButton->deleteLater();
     });
+
+    /* 下载任务 */
+    connect(subMusicWindow, &SubMusicWindow::addDownloadTask, this, &MainWindow::addDownloadTask);
 }
 
 void MainWindow::createVideoSubWindow()
@@ -355,4 +395,17 @@ void MainWindow::createVideoSubWindow()
         /* 销毁任务栏按钮 */
         taskButton->deleteLater();
     });
+
+    /* 主题一致 */
+    connect(this, &MainWindow::updateQuickWidgetColor, subVideoWindow, &SubVideoWindow::updateQuickWidgetColor);
+    updateTheme();
+}
+
+/* 添加下载任务 */
+void MainWindow::addDownloadTask(SingleDownloadFrame *singleDownloadFrame)
+{
+    singleDownloadFrame->setParent(this);
+    downloadListWidget->layout->addWidget(singleDownloadFrame);
+    connect(singleDownloadFrame, &SingleDownloadFrame::sendStateInfo, this, &MainWindow::showStateInfo);
+    singleDownloadFrame->startDownload();
 }

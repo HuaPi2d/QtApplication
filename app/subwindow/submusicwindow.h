@@ -2,6 +2,8 @@
 #define SUBMUSICWINDOW_H
 
 #include <QMdiSubWindow>
+#include <QUrl>
+#include "otherwidgets/singledownloadframe.h"
 
 class SubMusicWindow : public QMdiSubWindow
 {
@@ -12,6 +14,8 @@ public:
 signals:
     void sendStateInfo(QString state);
     void windowDestroyed(QMdiSubWindow *window);
+    void downloadFinished();
+    void addDownloadTask(SingleDownloadFrame *singleDownloadFrame);
 };
 
 #endif // SUBMUSICWINDOW_H

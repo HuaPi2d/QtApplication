@@ -31,10 +31,22 @@
         <file>resources/icons/IconamoonArrowRight5Circle.svg</file>
         <file>resources/icons/PhFolderNotchOpen.svg</file>
         <file>resources/icons/communist.svg</file>
+        <file>resources/icons/photo.svg</file>
+        <file>resources/icons/close.svg</file>
+        <file>resources/icons/downloading.svg</file>
+        <file>resources/icons/audio.svg</file>
+        <file>resources/icons/delete.svg</file>
+        <file>resources/icons/PhNotePencilBold.svg</file>
+        <file>resources/icons/warning.svg</file>
+        <file>resources/icons/warningRound.svg</file>
+        <file>resources/icons/Video Clip.png</file>
     </qresource>
     <qresource prefix="/pic/defaultPic">
         <file>resources/pic/defaultPic/defaultMusicPic.svg</file>
         <file>resources/pic/defaultPic/defaultMusicPic.jpg</file>
         <file>resources/pic/defaultPic/geQuBao.png</file>
+    </qresource>
+    <qresource prefix="/QML">
+        <file>resources/QML/SingleVideo.qml</file>
     </qresource>
 </RCC>

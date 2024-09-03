@@ -1,4 +1,4 @@
-QT       += core gui network multimedia multimediawidgets
+QT       += core gui network multimedia multimediawidgets quickwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,8 +9,13 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    info/videoinfo.cpp \
+    info/videoinfolistmodel.cpp \
     main.cpp \
     mainwindow.cpp \
+    otherwidgets/deletemusicdialog.cpp \
+    otherwidgets/downloadlistwidget.cpp \
+    otherwidgets/singledownloadframe.cpp \
     subwidgets/submusicwidget.cpp \
     subwidgets/subvideowidget.cpp \
     subwindow/submusicwindow.cpp \
@@ -19,16 +24,28 @@ SOURCES += \
     universal/rematcher.cpp
 
 HEADERS += \
+    ../build/Desktop_Qt_6_7_0_MinGW_64_bit-Release/app/ui_submusicwindow.h \
+    customize/ScrollingLabel.h \
+    customize/localmusiclistview.h \
+    info/videoinfo.h \
+    info/videoinfolistmodel.h \
     mainwindow.h \
+    otherwidgets/deletemusicdialog.h \
+    otherwidgets/downloadlistwidget.h \
+    otherwidgets/singledownloadframe.h \
     subwidgets/submusicwidget.h \
     subwidgets/subvideowidget.h \
     subwindow/submusicwindow.h \
     subwindow/subvideowindow.h \
     universal/getnetwork.h \
-    universal/rematcher.h
+    universal/rematcher.h \
+    universal/requestpro.h
 
 FORMS += \
     mainwindow.ui \
+    otherwidgets/deletemusicdialog.ui \
+    otherwidgets/downloadlistwidget.ui \
+    otherwidgets/singledownloadframe.ui \
     subwidgets/submusicwidget.ui \
     subwidgets/subvideowidget.ui
 

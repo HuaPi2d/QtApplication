@@ -82,19 +82,50 @@ height:40px;
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QWidget" name="randomSentenceWidget" native="true">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>60</height>
+          </size>
+         </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QLabel" name="randomSentenceLabel">
-            <property name="styleSheet">
-             <string notr="true">QLabel{
+           <widget class="QScrollArea" name="scrollArea">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>55</height>
+             </size>
+            </property>
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>712</width>
+               <height>46</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QLabel" name="randomSentenceLabel">
+                <property name="styleSheet">
+                 <string notr="true">QLabel{
     font-family: '黑体';
     font-size: 16px;
     font-weight: bold;
 }</string>
-            </property>
-            <property name="text">
-             <string>愿你我共勉</string>
-            </property>
+                </property>
+                <property name="text">
+                 <string>愿你我共勉</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
           <item>
@@ -256,6 +287,13 @@ QPushButton:pressed {
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QQuickWidget" name="quickWidget">
+      <property name="resizeMode">
+       <enum>QQuickWidget::SizeRootObjectToView</enum>
+      </property>
      </widget>
     </item>
    </layout>
@@ -520,6 +558,13 @@ QPushButton:pressed {
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QQuickWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">QtQuickWidgets/QQuickWidget</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resource.qrc"/>
  </resources>

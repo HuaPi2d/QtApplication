@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>623</width>
-    <height>327</height>
+    <height>383</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -128,43 +128,147 @@ QPushButton:pressed {
     </layout>
    </item>
    <item>
-    <widget class="QWidget" name="info_widgets" native="true">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>50</height>
-      </size>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QComboBox" name="website_comboBox">
-        <item>
-         <property name="text">
-          <string>bilibili</string>
+     <widget class="QWidget" name="searchTab">
+      <attribute name="title">
+       <string>视频搜索页</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QWidget" name="searchWidgets" native="true">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>50</height>
+          </size>
          </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>YouTube（需要梯子）</string>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QComboBox" name="searchEngineComboBox">
+            <item>
+             <property name="text">
+              <string>bilibili</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>爱奇艺</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>YouTube（需要梯子）</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="videoSearchContentLineEdit">
+            <property name="placeholderText">
+             <string>搜视频</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="searchVideoPushButton">
+            <property name="text">
+             <string>搜索</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QQuickWidget" name="searchResultQuickWidget">
+         <property name="resizeMode">
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="video_url_label">
-        <property name="text">
-         <string>视频链接</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="video_url"/>
-      </item>
-     </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="linkTab">
+      <attribute name="title">
+       <string>单链接视频</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QWidget" name="infoWidgets" native="true">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>50</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QComboBox" name="website_comboBox">
+            <item>
+             <property name="text">
+              <string>bilibili</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>爱奇艺</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>YouTube（需要梯子）</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="video_url_label">
+            <property name="text">
+             <string>视频链接</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="video_url"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="parsePushButton">
+            <property name="text">
+             <string>解析</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
+  <action name="searchVideoAction">
+   <property name="icon">
+    <iconset resource="../resource.qrc">
+     <normaloff>:/icon/resources/icons/MaterialSymbolsSearchRounded.svg</normaloff>:/icon/resources/icons/MaterialSymbolsSearchRounded.svg</iconset>
+   </property>
+   <property name="text">
+    <string>搜视频</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QQuickWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">QtQuickWidgets/QQuickWidget</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../resource.qrc"/>
  </resources>

@@ -1,4 +1,6 @@
 #include "submusicwidget.h"
+#include "otherwidgets/deletemusicdialog.h"
+#include "ui_deletemusicdialog.h"
 #include "ui_submusicwidget.h"
 #include "universal/getnetwork.h"
 #include "universal/rematcher.h"
@@ -71,6 +73,8 @@ SubMusicWidget::SubMusicWidget(QWidget *parent)
     });
     /* 进度条更新 */
     connect(mediaPlayer, &QMediaPlayer::positionChanged, this, [=](int position){
+        ui->toatalTimeLabel->setText(QString("%1:%2").arg(mediaPlayer->duration()/1000/60, 2, 10, QChar('0')).arg(mediaPlayer->duration()/1000%60, 2, 10, QChar('0')));
+        ui->currentTimeSlider->setRange(0, mediaPlayer->duration());
         currentTime = position;
         ui->currentTimeLabel->setText(QString("%1:%2").arg(position/1000/60, 2, 10, QChar('0')).arg(position/1000%60, 2, 10, QChar('0')));
         ui->currentTimeSlider->setValue(position);
@@ -88,6 +92,50 @@ SubMusicWidget::SubMusicWidget(QWidget *parent)
     connect(this, &SubMusicWidget::changeMusicProcessFinish, this, [=](){
         ui->previousMusicPushButton->setDisabled(false);
         ui->nextMusicPushButton->setDisabled(false);
+    });
+
+    /* 本地音乐更改 */
+    connect(ui->localSongListView, &LocalMusicListView::deleteMusic, this, [=](QModelIndex index){
+        MusicItem chosenItem;
+        chosenItem.title = localMusicModel->itemFromIndex(index)->data(Qt::UserRole + 1).toString();
+        chosenItem.artist = localMusicModel->itemFromIndex(index)->data(Qt::UserRole + 2).toString();
+        chosenItem.filePath = localMusicModel->itemFromIndex(index)->data(Qt::UserRole + 3).toString();
+        DeleteMusicDialog *deleteMusicDialog = new DeleteMusicDialog(this);
+        /* 强制对话 */
+        deleteMusicDialog->setModal(true);
+        deleteMusicDialog->ui->remindTextLabel->setText("是否删除" + chosenItem.title + "-" + chosenItem.artist + "?");
+        if (deleteMusicDialog->exec() == QDialog::Accepted)
+        {
+            if(deleteMusicDialog->ui->checkBox->isChecked())
+            {
+                if(currentSong.filePath != chosenItem.filePath)
+                {
+                    if(QFile::remove(chosenItem.filePath))
+                    {
+                        emit sendStateInfo("歌曲已成功删除");
+                    }
+                    else
+                    {
+                        emit sendStateInfo("文件删除失败");
+                        return;
+                    }
+                }
+                else
+                {
+                    emit sendStateInfo("文件已打开，删除失败");
+                }
+            }
+            /* 从列表中删除 */
+            localMusicList->removeMusicItem(chosenItem.filePath);
+            updateLocalMusicList();
+            createPlayList();
+        }
+    });
+    connect(ui->localSongListView, &LocalMusicListView::modifyMusic, this, [=](QModelIndex index){
+        MusicItem chosenItem;
+        chosenItem.title = localMusicModel->itemFromIndex(index)->data(Qt::UserRole + 1).toString();
+        chosenItem.artist = localMusicModel->itemFromIndex(index)->data(Qt::UserRole + 2).toString();
+
     });
 
     /* 加载配置 */
@@ -130,7 +178,7 @@ void SubMusicWidget::engineGeQuBao()
     connect(getSong, &GetNetWork::sendData, this, [=](QByteArray htmlContent){
         model->clear();
         netMusicList->clear();
-        QRegularExpressionMatchIterator i = findFitStruct(R"(<a href=\"(.*?)\"\n                               class=\"text-primary font-weight-bold\"\n                               target=\"_blank\">(.*?)\n                                                            </a>\n                        </div>\n                        <div class=\"text-success col-4 col-content\">\n                            (.*?)\n                        </div>)", htmlContent);
+        QRegularExpressionMatchIterator i = findFitStruct(R"(<a href=\"(.*?)\" target=\"_blank\" class=\"music-link\">\n                                <span class=\"text-primary font-weight-bolder music-title\">\n                                    (.*?)\n                                </span>\n                                <i class=\"text-muted\">-</i>\n                                <small class=\"text-jade font-weight-bolder\">\n                                    (.*?)\n)", htmlContent);
         QPixmap cover(":/pic/defaultPic/resources/pic/defaultPic/defaultMusicPic.svg");
         while (i.hasNext()) {
             QRegularExpressionMatch match = i.next();
@@ -503,6 +551,7 @@ void SubMusicWidget::playIndexNetMusic(const QModelIndex &index)
         /* 获取网址 */
         QString songDetailInfoUrl = index.data(Qt::UserRole + 5).toString();
         currentSong.parentUrl = songDetailInfoUrl;
+        currentSong.filePath = songDetailInfoUrl;
         currentSong.lyricsPath = "geQuBao";
         currentSong.coverPath = ":/pic/defaultPic/resources/pic/defaultPic/defaultMusicPic.svg";
 
@@ -650,25 +699,21 @@ bool SubMusicWidget::isLocal()
 /* 下载 */
 void SubMusicWidget::on_downloadPushButton_clicked()
 {
-    GetNetWork *musicDownloader = new GetNetWork(this);
+
     if(currentSong.filePath != "")
     {
         mainPixmap.save("music/cover/"+ currentSong.title + "-" + currentSong.artist + ".png");
 
-        connect(musicDownloader, &GetNetWork::sendData, this, [=](QByteArray byteArrayData){
-            QFile musicFile("music/audio/" + currentSong.title + "-" + currentSong.artist + ".mp3");
-            musicFile.open(QIODevice::WriteOnly);
-            musicFile.write(byteArrayData);
-            musicFile.close();
-            emit sendStateInfo(currentSong.title + "下载成功");
+        // emit sendDownloadInfo(currentSong.title, currentSong.filePath, "music/audio/" + currentSong.title + "-" + currentSong.artist + ".mp3", "audio");
+
+        SingleDownloadFrame *downloadFrame = new SingleDownloadFrame(currentSong.title, currentSong.filePath, "music/audio/" + currentSong.title + "-" + currentSong.artist + ".mp3", "audio");
+
+        /* 开始下载 */
+        emit addDownloadTask(downloadFrame);
+
+        connect(downloadFrame, &SingleDownloadFrame::downloadFinished, [=](){
             localMusicList->addMusicItem(currentSong.title, currentSong.artist, "music/audio/" + currentSong.title + "-" + currentSong.artist + ".mp3", "music/cover/"+ currentSong.title + "-" + currentSong.artist + ".png", currentSong.lyricsPath, currentSong.parentUrl);
         });
-
-        connect(musicDownloader, &GetNetWork::sendError, this, [=](){
-            emit sendStateInfo(currentSong.title + "下载失败");
-        });
-
-        musicDownloader->getData(currentSong.filePath);
     }
 }
 

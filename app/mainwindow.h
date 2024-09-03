@@ -6,6 +6,8 @@
 #include <QSignalMapper>
 #include <QButtonGroup>
 #include <QMdiSubWindow>
+#include "otherwidgets/downloadlistwidget.h"
+#include "otherwidgets/singledownloadframe.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -32,6 +34,7 @@ public:
     void checkSubWindows(QMdiSubWindow *window);
     void createMusicSubWindow();
     void createVideoSubWindow();
+    void addDownloadTask(SingleDownloadFrame *singleDownloadFrame);
 
 private:
     Ui::MainWindow *ui;
@@ -41,11 +44,13 @@ private:
     QSignalMapper *signalMapper;
     QButtonGroup *taskButtonList;
     QWidgetList *subWindowList;
+    DownloadListWidget *downloadListWidget;
 
 private slots:
     void onThemeActionTriggered();
 
 public: signals:
     void isAnyChildWindow();
+    void updateQuickWidgetColor(QColor color);
 };
 #endif // MAINWINDOW_H
