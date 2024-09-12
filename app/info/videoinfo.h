@@ -45,29 +45,12 @@ public:
     // 数据成员
     QString arcurl;
     QString pic;
-    int play;
+    QString play;
     QString duration;
     QString title;
-    int pubdate;
+    QString pubdate;
     QString author;
-    QString getArcurl() const;
-    void setArcurl(const QString &newArcurl);
-    int getPlay() const;
-    void setPlay(int newPlay);
 
-    QString getPic() const;
-    void setPic(const QString &newPic);
-
-signals:
-    void arcurlChanged();
-    void playChanged();
-
-    void picChanged();
-
-private:
-    Q_PROPERTY(QString arcurl READ getArcurl WRITE setArcurl NOTIFY arcurlChanged FINAL)
-    Q_PROPERTY(int play READ getPlay WRITE setPlay NOTIFY playChanged FINAL)
-    Q_PROPERTY(QString pic READ getPic WRITE setPic NOTIFY picChanged FINAL)
 };
 
 #endif // VIDEOINFO_H

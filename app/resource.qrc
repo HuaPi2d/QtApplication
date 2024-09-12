@@ -40,13 +40,17 @@
         <file>resources/icons/warning.svg</file>
         <file>resources/icons/warningRound.svg</file>
         <file>resources/icons/Video Clip.png</file>
+        <file>resources/icons/bilibili.svg</file>
+        <file>resources/icons/UP.svg</file>
     </qresource>
     <qresource prefix="/pic/defaultPic">
         <file>resources/pic/defaultPic/defaultMusicPic.svg</file>
         <file>resources/pic/defaultPic/defaultMusicPic.jpg</file>
         <file>resources/pic/defaultPic/geQuBao.png</file>
+        <file>resources/pic/loading.gif</file>
     </qresource>
     <qresource prefix="/QML">
         <file>resources/QML/SingleVideo.qml</file>
+        <file>resources/QML/FlickableSingleVideo.qml</file>
     </qresource>
 </RCC>

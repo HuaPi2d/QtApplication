@@ -163,6 +163,11 @@ QPushButton:pressed {
               <string>YouTube（需要梯子）</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>风花雪月</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item>

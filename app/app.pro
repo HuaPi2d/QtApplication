@@ -38,8 +38,10 @@ HEADERS += \
     subwindow/submusicwindow.h \
     subwindow/subvideowindow.h \
     universal/getnetwork.h \
+    universal/htmlParserPro.h \
     universal/rematcher.h \
-    universal/requestpro.h
+    universal/requestpro.h \
+    universal/stringConvert.h
 
 FORMS += \
     mainwindow.ui \
@@ -52,7 +54,10 @@ FORMS += \
 INCLUDEPATH += \
     ../src
 
+INCLUDEPATH += D:\xml\include\libxml2
+
 LIBS += \
+    -LD:\xml\lib -llibxml2
 
 
 # Default rules for deployment.

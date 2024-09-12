@@ -31,13 +31,25 @@ public:
 
     QHash<int,QByteArray> roleNames() const override;
 
+    Q_INVOKABLE void itemClicked(int index);
+
+public: signals:
+    Q_INVOKABLE void scrollToBottom();
+
 private:
     QVector<VideoInfo> videoInfoList;
 
-private: signals:
+private: Q_PROPERTY(int state READ getState WRITE setState NOTIFY stateChanged FINAL)
+
+signals:
     void finishReceiveData();
 
+    void stateChanged();
+
 public:
+    // 状态 0:显示 1:加载
+    int state;
+
     void clearModel(){
         // 通知视图即将重置模型数据
         beginResetModel();
@@ -50,6 +62,8 @@ public:
     }
 
     void addVideoInfo(const VideoInfo &videoInfo);
+    int getState() const;
+    void setState(int newState);
 };
 
 #endif // VIDEOINFOLISTMODEL_H

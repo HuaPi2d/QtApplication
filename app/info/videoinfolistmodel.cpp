@@ -56,6 +56,24 @@ QHash<int, QByteArray> VideoInfoListModel::roleNames() const
     return roles;
 }
 
+void VideoInfoListModel::itemClicked(int index)
+{
+    qDebug() << index;
+}
+
+int VideoInfoListModel::getState() const
+{
+    return state;
+}
+
+void VideoInfoListModel::setState(int newState)
+{
+    if (state == newState)
+        return;
+    state = newState;
+    emit stateChanged();
+}
+
 void VideoInfoListModel::addVideoInfo(const VideoInfo &videoInfo)
 {
     // 插入前通知模型

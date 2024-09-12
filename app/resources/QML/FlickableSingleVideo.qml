@@ -7,35 +7,18 @@ import Qt5Compat.GraphicalEffects
 Item {
     anchors.fill: parent
 
-    ScrollView{
-        id: searchResult
+    Flickable{
+        id: flickable
         anchors.fill: parent
-        contentWidth: width
+        contentWidth: parent.width
 
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        interactive: false
 
-        ScrollBar.vertical: ScrollBar {
-            anchors.right: parent.right
-
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: 10
-
-            background: Rectangle {
-                color: widgetColor
-            }
-
-            // 自定义滑块的颜色
-            contentItem: Rectangle {
-                implicitWidth: 10
-                color: "grey"
-                radius: 5
-            }
-        }
+        signal scrollToBottom();
 
         Flow{
             id: flow
-            anchors.fill: parent
+            width: parent.width
 
             Repeater{
                 id: videoList
@@ -253,14 +236,43 @@ Item {
                 }
             }
         }
+
+        Behavior on contentY {
+            NumberAnimation {
+                duration: 100  // 动画持续时间，单位是毫秒
+                easing.type: Easing.OutQuad  // 使用缓动效果
+            }
+        }
+
+        WheelHandler {
+
+            // 处理纵向滚动
+            onWheel: (event)=>{
+                if(flickable.contentY >= 0 && flickable.contentY <= flow.height - flickable.height){
+
+                    flickable.contentY -= event.angleDelta.y
+                }
+                else if(flickable.contentY < 0){
+                    flickable.contentY = 0
+                }
+                else if(flickable.contentY > flow.height - flickable.height){
+                    flickable.contentY = flow.height - flickable.height
+                    if(videoInfoListModel.state == 0){
+                        flickable.scrollToBottom()
+                    }
+                }
+            }
+        }
+
+        Component.onCompleted: {
+            scrollToBottom.connect(videoInfoListModel.scrollToBottom)
+        }
+
     }
 
-    VideoInfoListModel
-    {
+    VideoInfoListModel{
         id: videoInfoListModel
         objectName: "videoInfoListModel"
     }
 
-    MouseArea{
-    }
 }

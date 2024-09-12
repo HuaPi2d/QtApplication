@@ -4,6 +4,7 @@
 #include "ui_submusicwidget.h"
 #include "universal/getnetwork.h"
 #include "universal/rematcher.h"
+#include "universal/htmlParserPro.h"
 #include <algorithm>  // 包含std::shuffle
 #include <random>     // 包含std::random_device 和 std::mt19937
 
@@ -176,18 +177,23 @@ void SubMusicWidget::engineGeQuBao()
 
     /* 请求成功更新搜索结果 */
     connect(getSong, &GetNetWork::sendData, this, [=](QByteArray htmlContent){
+        QString htmlString = QString::fromUtf8(htmlContent);
+
         model->clear();
         netMusicList->clear();
-        QRegularExpressionMatchIterator i = findFitStruct(R"(<a href=\"(.*?)\" target=\"_blank\" class=\"music-link\">\n                                <span class=\"text-primary font-weight-bolder music-title\">\n                                    (.*?)\n                                </span>\n                                <i class=\"text-muted\">-</i>\n                                <small class=\"text-jade font-weight-bolder\">\n                                    (.*?)\n)", htmlContent);
-        QPixmap cover(":/pic/defaultPic/resources/pic/defaultPic/defaultMusicPic.svg");
-        while (i.hasNext()) {
-            QRegularExpressionMatch match = i.next();
-            QString url = "https://www.gequbao.com" + match.captured(1);
-            QString songTitle = match.captured(2).trimmed();
-            QString artist = match.captured(3).trimmed();
-            model->addMusic(MusicInfo(songTitle, artist, "", cover, url));
-            netMusicList->addMusicItem(songTitle, artist, "", ":/pic/defaultPic/resources/pic/defaultPic/defaultMusicPic.svg", "geQuBao", url);
-        }
+
+        xmlDocPtr doc = get_html_doc(htmlString.toStdString());
+
+        // QRegularExpressionMatchIterator i = findFitStruct(R"(<a href=\"(.*?)\" target=\"_blank\" class=\"music-link\">\n                                <span class=\"text-primary font-weight-bolder music-title\">\n                                    (.*?)\n                                </span>\n                                <i class=\"text-muted\">-</i>\n                                <small class=\"text-jade font-weight-bolder\">\n                                    (.*?)\n)", htmlContent);
+        // QPixmap cover(":/pic/defaultPic/resources/pic/defaultPic/defaultMusicPic.svg");
+        // while (i.hasNext()) {
+        //     QRegularExpressionMatch match = i.next();
+        //     QString url = "https://www.gequbao.com" + match.captured(1);
+        //     QString songTitle = match.captured(2).trimmed();
+        //     QString artist = match.captured(3).trimmed();
+        //     model->addMusic(MusicInfo(songTitle, artist, "", cover, url));
+        //     netMusicList->addMusicItem(songTitle, artist, "", ":/pic/defaultPic/resources/pic/defaultPic/defaultMusicPic.svg", "geQuBao", url);
+        // }
     });
 
     /* 请求失败状态栏显示 */
@@ -414,7 +420,6 @@ void SubMusicWidget::createPlayList()
 /* 改变按钮提示和样式等 */
 void SubMusicWidget::changePlayPushButtonStyle()
 {
-    qDebug() << mediaPlayer->playbackState();
     switch (mediaPlayer->playbackState()) {
     case QMediaPlayer::PlaybackState::PlayingState:
     {

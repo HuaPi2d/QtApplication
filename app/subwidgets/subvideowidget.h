@@ -2,6 +2,7 @@
 #define SUBVIDEOWIDGET_H
 
 #include "ui_subvideowidget.h"
+#include "info/videoinfolistmodel.h"
 #include <QWidget>
 #include <QQuickWidget>
 #include <QQuickItem>
@@ -9,6 +10,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QQmlContext>
+#include <QDateTime>
 
 namespace Ui {
 class SubVideoWidget;
@@ -29,12 +31,18 @@ public:
     void loadSettings();
     void searchVideo();
     void searchByBiliBili();
+    void searchByMoGu();
 
 public slots:
     void updateQuickWidgetColor(QColor color);
+    void scrollToBottom();
 
 private:
     Ui::SubVideoWidget *ui;
+    int currentPage;
+    VideoInfoListModel *videoInfoListModel;
+    QString currentWeb;
+    QString currentSearchContent;
 
 public: signals:
     void widgetClosed();

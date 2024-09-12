@@ -1,7 +1,7 @@
 #include "subvideowidget.h"
 #include "ui_subvideowidget.h"
 #include "universal/requestpro.h"
-#include "info/videoinfolistmodel.h"
+#include "universal/stringConvert.h"
 
 #include <QSettings>
 
@@ -67,9 +67,31 @@ void SubVideoWidget::searchVideo()
 {
     if(ui->videoSearchContentLineEdit->text() != "")
     {
-        if(ui->searchEngineComboBox->currentText() == "bilibili")
+        currentPage = 1;
+
+        /* 加载搜索框，并寻找根节点 */
+        ui->searchResultQuickWidget->setSource(QUrl(QStringLiteral("qrc:/QML/resources/QML/FlickableSingleVideo.qml")));
+        QQuickItem *rootObject = ui->searchResultQuickWidget->rootObject();
+        videoInfoListModel = rootObject->findChild<VideoInfoListModel *>("videoInfoListModel");
+
+        connect(videoInfoListModel, &VideoInfoListModel::scrollToBottom, this, &SubVideoWidget::scrollToBottom);
+
+        videoInfoListModel->state = 1;
+
+        /* 清除上次搜索结果 */
+        videoInfoListModel->clearModel();
+
+        // 记住当前搜索信息，方便后续动态加载相同内容
+        currentWeb = ui->searchEngineComboBox->currentText();
+        currentSearchContent = ui->videoSearchContentLineEdit->text();
+
+        if(currentWeb == "bilibili")
         {
             searchByBiliBili();
+        }
+        else if(currentWeb == "风花雪月")
+        {
+            searchByMoGu();
         }
     }
 
@@ -93,20 +115,15 @@ void SubVideoWidget::searchByBiliBili()
 
     QJsonObject params;
     params["search_type"] = "video";
-    params["page"] = "1";
-    params["keyword"] = ui->videoSearchContentLineEdit->text();
+    params["page"] = QString::number(currentPage);
+    params["keyword"] = currentSearchContent;
 
     QUrl url("https://api.bilibili.com/x/web-interface/wbi/search/type");
     QString requestType = "GET";
 
     QObject::connect(request, &RequestPro::requestCompleted, [=](const QJsonObject &response) {
-        /* 加载搜索框，并寻找根节点 */
-        ui->searchResultQuickWidget->setSource(QUrl(QStringLiteral("qrc:/QML/resources/QML/SingleVideo.qml")));
-        QQuickItem *rootObject = ui->searchResultQuickWidget->rootObject();
-        VideoInfoListModel *videoInfoListModel = rootObject->findChild<VideoInfoListModel *>("videoInfoListModel");
-
-        /* 清除上次搜索结果 */
-        videoInfoListModel->clearModel();
+        // 搜索成功，页数增加
+        currentPage += 1;
 
         QJsonArray resultList = response["data"]["result"].toArray();
 
@@ -124,19 +141,92 @@ void SubVideoWidget::searchByBiliBili()
                 videoInfo.pic = videoInfoJsonObject["pic"].toString();
             }
             videoInfo.author = videoInfoJsonObject["author"].toString();
-            videoInfo.duration = videoInfoJsonObject["duration"].toString();
-            videoInfo.play = videoInfoJsonObject["play"].toInt();
-            videoInfo.pubdate = videoInfoJsonObject["pubdate"].toInt();
+            videoInfo.duration = convertTimeFormat(videoInfoJsonObject["duration"].toString());
+            // videoInfo.duration = videoInfoJsonObject["duration"].toString();
+            if(videoInfoJsonObject["play"].toInt() < 10000){
+                videoInfo.play = QString::number(videoInfoJsonObject["play"].toInt());
+            }
+            else if(videoInfoJsonObject["play"].toInt() < 10000000){
+                videoInfo.play = QString("%1万").arg(videoInfoJsonObject["play"].toInt()/10000.0, 0, 'g', 3);
+            }
+            else{
+                videoInfo.play = QString("%1万").arg(videoInfoJsonObject["play"].toInt()/10000, 0, 10);
+            }
+            videoInfo.pubdate = QDateTime::fromSecsSinceEpoch(videoInfoJsonObject["pubdate"].toInt()).toString("yyyy-MM-dd");
             videoInfo.title = videoInfoJsonObject["title"].toString();
 
             videoInfoListModel->addVideoInfo(videoInfo);
         }
 
         emit videoInfoListModel->finishReceiveData();
+
+        videoInfoListModel->state = 0;
     });
 
     QObject::connect(request, &RequestPro::requestError, [this](const QString &error) {
         emit sendStateInfo("搜索失败，可尝试换源");
+        videoInfoListModel->state = 0;
+    });
+
+    request->sendRequest(headers, params, url, requestType);
+}
+
+void SubVideoWidget::searchByMoGu()
+{
+    RequestPro *request = new RequestPro();
+
+    QJsonObject headers;
+    headers["User-Agent"] = "okhttp/3.12.0";
+    headers["Connection"] = "Keep-Alive";
+    headers["Accept"] = "application/json";
+
+    QJsonObject params;
+    params["limit"] = "20";
+    params["page"] = QString::number(currentPage);
+    params["wd"] = currentSearchContent;
+
+    QUrl url("https://api.koudailc.net/api/vod/clever");
+    QString requestType = "GET";
+
+    QObject::connect(request, &RequestPro::requestCompleted, [=](const QJsonObject &response) {
+        // 搜索成功，页数增加
+        currentPage += 1;
+
+        QJsonArray resultList = response["data"]["list"].toArray();
+
+        VideoInfo videoInfo;
+
+        for(QJsonValueRef videoInfoRaw: resultList)
+        {
+            QJsonObject videoInfoJsonObject = videoInfoRaw.toObject();
+
+            videoInfo.arcurl = videoInfoJsonObject["id"].toString();
+            videoInfo.pic = videoInfoJsonObject["cover"].toString();
+            videoInfo.author = videoInfoJsonObject["users"].toArray()[0].toObject()["name"].toString();
+            videoInfo.duration = convertTimeFormat(videoInfoJsonObject["duration"].toString());
+            if(videoInfoJsonObject["views"].toInt() < 10000){
+                videoInfo.play = QString::number(videoInfoJsonObject["views"].toInt());
+            }
+            else if(videoInfoJsonObject["views"].toInt() < 10000000){
+                videoInfo.play = QString("%1万").arg(videoInfoJsonObject["views"].toInt()/10000.0, 0, 'g', 3);
+            }
+            else{
+                videoInfo.play = QString("%1万").arg(videoInfoJsonObject["views"].toInt()/10000, 0, 10);
+            }
+            videoInfo.pubdate = "";
+            videoInfo.title = videoInfoJsonObject["title"].toString();
+
+            videoInfoListModel->addVideoInfo(videoInfo);
+        }
+
+        emit videoInfoListModel->finishReceiveData();
+
+        videoInfoListModel->state = 0;
+    });
+
+    QObject::connect(request, &RequestPro::requestError, [this](const QString &error) {
+        emit sendStateInfo("搜索失败，可尝试换源");
+        videoInfoListModel->state = 0;
     });
 
     request->sendRequest(headers, params, url, requestType);
@@ -146,5 +236,19 @@ void SubVideoWidget::updateQuickWidgetColor(QColor color)
 {
     ui->searchResultQuickWidget->setClearColor(color);
     ui->searchResultQuickWidget->rootContext()->setContextProperty("widgetColor", color);
+}
+
+void SubVideoWidget::scrollToBottom()
+{
+    videoInfoListModel->state = 1;
+
+    if(currentWeb == "bilibili")
+    {
+        searchByBiliBili();
+    }
+    else if(currentWeb == "风花雪月")
+    {
+        searchByMoGu();
+    }
 }
 
