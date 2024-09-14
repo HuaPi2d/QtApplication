@@ -7,6 +7,7 @@
 #include "universal/htmlParserPro.h"
 #include <algorithm>  // 包含std::shuffle
 #include <random>     // 包含std::random_device 和 std::mt19937
+#include <QRegularExpression>
 
 
 SubMusicWidget::SubMusicWidget(QWidget *parent)
@@ -182,18 +183,23 @@ void SubMusicWidget::engineGeQuBao()
         model->clear();
         netMusicList->clear();
 
+        // 获取网页中歌曲列表节点集
         xmlDocPtr doc = get_html_doc(htmlString.toStdString());
+        xmlXPathObjectPtr xpathObj = get_xpath_nodeset(doc, (const xmlChar*) "//div[@class='card-text']/div[@class='row']");
+        xmlNodeSetPtr listNodeSet = xpathObj->nodesetval;
 
-        // QRegularExpressionMatchIterator i = findFitStruct(R"(<a href=\"(.*?)\" target=\"_blank\" class=\"music-link\">\n                                <span class=\"text-primary font-weight-bolder music-title\">\n                                    (.*?)\n                                </span>\n                                <i class=\"text-muted\">-</i>\n                                <small class=\"text-jade font-weight-bolder\">\n                                    (.*?)\n)", htmlContent);
-        // QPixmap cover(":/pic/defaultPic/resources/pic/defaultPic/defaultMusicPic.svg");
-        // while (i.hasNext()) {
-        //     QRegularExpressionMatch match = i.next();
-        //     QString url = "https://www.gequbao.com" + match.captured(1);
-        //     QString songTitle = match.captured(2).trimmed();
-        //     QString artist = match.captured(3).trimmed();
-        //     model->addMusic(MusicInfo(songTitle, artist, "", cover, url));
-        //     netMusicList->addMusicItem(songTitle, artist, "", ":/pic/defaultPic/resources/pic/defaultPic/defaultMusicPic.svg", "geQuBao", url);
-        // }
+        // 遍历节点集获取内容
+        QPixmap cover(":/pic/defaultPic/resources/pic/defaultPic/defaultMusicPic.svg");
+        for (int i = 0; i < listNodeSet->nodeNr; i++) {
+            xmlNodePtr musicNode = listNodeSet->nodeTab[i];
+
+            QString url = "https://www.gequbao.com" + QString::fromStdString(get_node_attribute(musicNode, (xmlChar *)"./div/a/@href")).simplified();
+            QString songTitle = QString::fromStdString(get_node_attribute(musicNode, (xmlChar *)"./div/a/span/span"));
+            QString artist = QString::fromStdString(get_node_attribute(musicNode, (xmlChar *)"./div/a/small")).simplified();
+
+            model->addMusic(MusicInfo(songTitle, artist, "", cover, url));
+            netMusicList->addMusicItem(songTitle, artist, "", ":/pic/defaultPic/resources/pic/defaultPic/defaultMusicPic.svg", "geQuBao", url);
+        }
     });
 
     /* 请求失败状态栏显示 */
