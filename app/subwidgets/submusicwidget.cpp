@@ -5,6 +5,9 @@
 #include "universal/getnetwork.h"
 #include "universal/rematcher.h"
 #include "universal/htmlParserPro.h"
+#include "universal/requestpro.h"
+#include "customize/pixmappro.h"
+#include "customize/localmusiclistview.h"
 #include <algorithm>  // 包含std::shuffle
 #include <random>     // 包含std::random_device 和 std::mt19937
 #include <QRegularExpression>
@@ -164,6 +167,9 @@ void SubMusicWidget::searchMusic()
     if(ui->musicSourceComboBox->currentIndex() == 0){
         engineGeQuBao();
     }
+    else if(ui->musicSourceComboBox->currentText() == "酷我音乐"){
+        engineKuWo();
+    }
 }
 
 /* 调用歌曲宝搜索引擎 */
@@ -209,6 +215,56 @@ void SubMusicWidget::engineGeQuBao()
 
     /* 发送请求 */
     getSong->getData(QUrl(urlPrifix + urlSearchContent));
+}
+
+void SubMusicWidget::engineKuWo()
+{
+    RequestPro *request = new RequestPro();
+
+    QJsonObject headers;
+    headers["User-Agent"] = "okhttp/3.12.0";
+    headers["Connection"] = "Keep-Alive";
+
+    QJsonObject params;
+    params["pn"] = "0";
+    params["rn"] = "100";
+    params["all"] = ui->musicSearchLineEdit->text();
+    params["ft"] = "music";
+    params["client"] = "kt";
+    params["rformat"] = "json";
+    params["encoding"] = "utf8";
+    params["vipver"] = "1";
+    params["mobi"] = "1";
+
+    QUrl url("https://search.kuwo.cn/r.s");
+    QString requestType = "GET";
+
+    QObject::connect(request, &RequestPro::requestCompleted, [=](const QJsonObject &response){
+        model->clear();
+        netMusicList->clear();
+
+        QJsonArray resultList = response["abslist"].toArray();
+
+        for(QJsonValueRef musicInfoRaw: resultList)
+        {
+            QJsonObject videoInfoJsonObject = musicInfoRaw.toObject();
+
+            PixmapPro *pixmapPro = new PixmapPro("http://img1.kwcdn.kuwo.cn/star/albumcover/" + videoInfoJsonObject["web_albumpic_short"].toString());
+            QPixmap cover = pixmapPro->getPixmap();
+            QString url = videoInfoJsonObject["ARTIST"].toString();
+            QString songTitle = videoInfoJsonObject["NAME"].toString();
+            QString artist = videoInfoJsonObject["ARTIST"].toString();
+
+            model->addMusic(MusicInfo(songTitle, artist, "", pixmapPro->getPixmap(), url));
+            netMusicList->addMusicItem(songTitle, artist, "", "http://img1.kwcdn.kuwo.cn/star/albumcover/" + videoInfoJsonObject["web_albumpic_short"].toString(), "kuWo", url);
+        }
+    });
+
+    QObject::connect(request, &RequestPro::requestError, [this](const QString &error){
+        emit sendStateInfo("酷我音乐搜索超时，可尝试换源");
+    });
+
+    request->sendRequest(headers, params, url, requestType);
 }
 
 /* 播放模式改变 */
@@ -332,6 +388,7 @@ void SubMusicWidget::loadSettings()
 void SubMusicWidget::setMainPixmap()
 {
     emit sendStateInfo(currentSong.coverPath);
+    qDebug() << currentSong.coverPath;
     if(currentSong.coverPath.contains("http"))
     {
         /* 图片地址 */
@@ -472,7 +529,7 @@ void SubMusicWidget::playMusic()
 /* 打开本地文件夹 */
 void SubMusicWidget::on_openLocalDirPushButton_clicked()
 {
-    auto musicDirString = QFileDialog::getExistingDirectory(this, "选择音乐所在目录", "D:\\qt-project\\request\\app\\music");
+    auto musicDirString = QFileDialog::getExistingDirectory(this, "选择音乐所在目录", "music");
     QDir musicDir(musicDirString);
     auto musicList = musicDir.entryList(QStringList() << "*.mp3" << "*.m4a" << "*.wav");
     MusicItem musicItem;
@@ -617,6 +674,10 @@ void SubMusicWidget::playIndexNetMusic(const QModelIndex &index)
 
         getSong->getData(api);
         emit sendStateInfo(api.toString());
+    }
+    else if(index.data(Qt::UserRole + 5).toString().contains("kuwo") == true)
+    {
+
     }
 }
 

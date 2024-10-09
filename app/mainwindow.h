@@ -34,6 +34,9 @@ public:
     void checkSubWindows(QMdiSubWindow *window);
     void createMusicSubWindow();
     void createVideoSubWindow();
+    void createTextTransitionSubWindow();
+    void createRandomLearningSubWindow();
+    void createSSJJSubWindow();
     void addDownloadTask(SingleDownloadFrame *singleDownloadFrame);
 
 private:

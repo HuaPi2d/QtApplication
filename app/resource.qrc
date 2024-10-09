@@ -42,15 +42,43 @@
         <file>resources/icons/Video Clip.png</file>
         <file>resources/icons/bilibili.svg</file>
         <file>resources/icons/UP.svg</file>
+        <file>resources/icons/textTransition.png</file>
+        <file>resources/icons/randomLearning.png</file>
+        <file>resources/icons/Bold.png</file>
+        <file>resources/icons/ico.ico</file>
+        <file>resources/icons/script.png</file>
+        <file>resources/icons/Hacke.png</file>
+        <file>resources/icons/spider.png</file>
+        <file>resources/icons/setting.png</file>
     </qresource>
     <qresource prefix="/pic/defaultPic">
         <file>resources/pic/defaultPic/defaultMusicPic.svg</file>
         <file>resources/pic/defaultPic/defaultMusicPic.jpg</file>
         <file>resources/pic/defaultPic/geQuBao.png</file>
-        <file>resources/pic/loading.gif</file>
     </qresource>
     <qresource prefix="/QML">
         <file>resources/QML/SingleVideo.qml</file>
         <file>resources/QML/FlickableSingleVideo.qml</file>
+    </qresource>
+    <qresource prefix="/pic/script">
+        <file>resources/pic/script/loaded_cover.png</file>
+        <file>resources/pic/script/click_game_area.png</file>
+        <file>resources/pic/script/close_activity.png</file>
+        <file>resources/pic/script/first_server.png</file>
+        <file>resources/pic/script/hall.png</file>
+        <file>resources/pic/script/leisure_mode.png</file>
+        <file>resources/pic/script/close_small_activity_window.png</file>
+        <file>resources/pic/script/confirm_exit_channel.png</file>
+        <file>resources/pic/script/cancel.png</file>
+        <file>resources/pic/script/energy_gray.png</file>
+        <file>resources/pic/script/energy_lighted.png</file>
+        <file>resources/pic/script/LD_begin.png</file>
+        <file>resources/pic/script/LD_Icon.png</file>
+        <file>resources/pic/script/loading_pic.png</file>
+        <file>resources/pic/script/exit_LD.png</file>
+        <file>resources/pic/script/use_energy.png</file>
+        <file>resources/pic/script/morningRemind.png</file>
+        <file>resources/pic/script/resolutionRatio.png</file>
+        <file>resources/pic/script/money.png</file>
     </qresource>
 </RCC>

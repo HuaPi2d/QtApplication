@@ -241,6 +241,13 @@ public:
         playlist.clear();
     }
 
+    void test(){
+        for(MusicItem musicItem: playlist)
+        {
+            qDebug() << "\n标题:" << musicItem.title << "\n作曲:" << musicItem.artist << "\n封面" << musicItem.coverPath << "\n地址" << musicItem.filePath;
+        }
+    }
+
     QVector<MusicItem> getPlaylist() const {
         return playlist;
     }
@@ -263,6 +270,7 @@ public:
     ~SubMusicWidget();
     void searchMusic();
     void engineGeQuBao();
+    void engineKuWo();
     void playModeChange();
     void saveSettings();
     void loadSettings();

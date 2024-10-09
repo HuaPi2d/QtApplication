@@ -232,10 +232,13 @@ void SubVideoWidget::searchByMoGu()
     request->sendRequest(headers, params, url, requestType);
 }
 
+/* 更改QML窗口风格 */
 void SubVideoWidget::updateQuickWidgetColor(QColor color)
 {
     ui->searchResultQuickWidget->setClearColor(color);
     ui->searchResultQuickWidget->rootContext()->setContextProperty("widgetColor", color);
+    ui->videoPlayQuickWidget->setClearColor(color);
+    ui->videoPlayQuickWidget->rootContext()->setContextProperty("widgetColor", color);
 }
 
 void SubVideoWidget::scrollToBottom()

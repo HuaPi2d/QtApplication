@@ -249,6 +249,13 @@ QPushButton:pressed {
          </layout>
         </widget>
        </item>
+       <item>
+        <widget class="QQuickWidget" name="videoPlayQuickWidget">
+         <property name="resizeMode">
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>

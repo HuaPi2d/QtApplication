@@ -163,6 +163,11 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
+               <string>酷我音乐</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>酷狗音乐</string>
               </property>
              </item>
@@ -571,7 +576,7 @@ QPushButton:pressed {
   <customwidget>
    <class>LocalMusicListView</class>
    <extends>QListView</extends>
-   <header>localmusiclistview.h</header>
+   <header location="global">customize/localmusiclistview.h</header>
   </customwidget>
  </customwidgets>
  <resources>

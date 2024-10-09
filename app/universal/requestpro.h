@@ -16,10 +16,10 @@ public:
 
     void sendRequest(const QJsonObject &headers, const QJsonObject &params, const QUrl &url, const QString &requestType) {
         QNetworkRequest request(url);
-        setHeaders(request, headers);
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
         if (requestType.toUpper() == "GET") {
+            setHeaders(request, headers);
             QUrlQuery query;
             for (auto it = params.begin(); it != params.end(); ++it) {
                 query.addQueryItem(it.key(), it.value().toString());
@@ -32,7 +32,9 @@ public:
         } else if (requestType.toUpper() == "POST") {
             QJsonDocument jsonDoc(params);
             QByteArray jsonData = jsonDoc.toJson();
+            qDebug() << QString::fromUtf8(jsonData);
             request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+            setHeaders(request, headers);
             connect(manager, &QNetworkAccessManager::finished, this, &RequestPro::handleResponse);
             manager->post(request, jsonData);
         }

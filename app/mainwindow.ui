@@ -193,20 +193,6 @@ QPushButton:pressed {
           <string>网络工具</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="video_pushButton">
-            <property name="toolTip">
-             <string>b站,YouTube等视频网站解析</string>
-            </property>
-            <property name="text">
-             <string> 视频解析</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resource.qrc">
-              <normaloff>:/icon/resources/icons/MaterialSymbolsMediaLinkOutline.svg</normaloff>:/icon/resources/icons/MaterialSymbolsMediaLinkOutline.svg</iconset>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <spacer name="verticalSpacer">
             <property name="orientation">
@@ -216,19 +202,6 @@ QPushButton:pressed {
              <size>
               <width>20</width>
               <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="2">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
              </size>
             </property>
            </spacer>
@@ -244,6 +217,47 @@ QPushButton:pressed {
             <property name="icon">
              <iconset resource="resource.qrc">
               <normaloff>:/icon/resources/icons/MaterialSymbolsGenresOutline.svg</normaloff>:/icon/resources/icons/MaterialSymbolsGenresOutline.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="video_pushButton">
+            <property name="toolTip">
+             <string>b站,YouTube等视频网站解析</string>
+            </property>
+            <property name="text">
+             <string> 视频解析</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/icon/resources/icons/MaterialSymbolsMediaLinkOutline.svg</normaloff>:/icon/resources/icons/MaterialSymbolsMediaLinkOutline.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="textTransitionPushButton">
+            <property name="toolTip">
+             <string>文字转语音工具</string>
+            </property>
+            <property name="text">
+             <string>墨韵声扬</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/icon/resources/icons/textTransition.png</normaloff>:/icon/resources/icons/textTransition.png</iconset>
             </property>
            </widget>
           </item>
@@ -272,6 +286,75 @@ QPushButton:pressed {
           </item>
           <item row="0" column="1">
            <spacer name="horizontalSpacerOfDGB">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="learning_groupBox">
+         <property name="title">
+          <string>学习工具</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QPushButton" name="randomLearningPushButton">
+            <property name="toolTip">
+             <string>英一靠它过的</string>
+            </property>
+            <property name="text">
+             <string>随机复习</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/icon/resources/icons/randomLearning.png</normaloff>:/icon/resources/icons/randomLearning.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacerOfLearning">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gameGroupBox">
+         <property name="title">
+          <string>游戏专区</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="ssjjPushButton">
+            <property name="text">
+             <string>生死狙击</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/icon/resources/icons/ico.ico</normaloff>:/icon/resources/icons/ico.ico</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer_2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -353,9 +436,12 @@ QPushButton:pressed {
     </property>
     <addaction name="video_action"/>
     <addaction name="music_action"/>
+    <addaction name="textTransitionAction"/>
+    <addaction name="ranLearning_action"/>
     <addaction name="separator"/>
     <addaction name="home_action"/>
     <addaction name="function_action"/>
+    <addaction name="ssjj_action"/>
    </widget>
    <widget class="QMenu" name="aboutMenu">
     <property name="title">
@@ -555,6 +641,33 @@ QPushButton:pressed {
    </property>
    <property name="text">
     <string>转到工作界面</string>
+   </property>
+  </action>
+  <action name="textTransitionAction">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icon/resources/icons/textTransition.png</normaloff>:/icon/resources/icons/textTransition.png</iconset>
+   </property>
+   <property name="text">
+    <string>墨韵声扬</string>
+   </property>
+  </action>
+  <action name="ranLearning_action">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icon/resources/icons/randomLearning.png</normaloff>:/icon/resources/icons/randomLearning.png</iconset>
+   </property>
+   <property name="text">
+    <string>随机复习</string>
+   </property>
+  </action>
+  <action name="ssjj_action">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icon/resources/icons/ico.ico</normaloff>:/icon/resources/icons/ico.ico</iconset>
+   </property>
+   <property name="text">
+    <string>生死狙击</string>
    </property>
   </action>
  </widget>
